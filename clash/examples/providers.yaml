@@ -8,8 +8,8 @@ rule-providers:
 # Insert after existing advertising/tracking and private-network rules.
 # Keep the rest of your original rules; this is only a merge fragment.
 rules:
-  - RULE-SET,NickClaude,固定家宽出口
-  - RULE-SET,NickPayment,固定家宽出口
-  - RULE-SET,NickTelemetry,固定家宽出口
-  - RULE-SET,NickGoogle,固定家宽出口
-  - RULE-SET,NickExitCheck,固定家宽出口
+  - RULE-SET,NickClaude,CC出口
+  - RULE-SET,NickPayment,CC出口
+  - RULE-SET,NickTelemetry,CC出口
+  - RULE-SET,NickGoogle,CC出口
+  - RULE-SET,NickExitCheck,CC出口

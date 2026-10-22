@@ -120,7 +120,7 @@ def build(mihomo, output, repository):
         f'  {name}: {json.dumps(value, ensure_ascii=False)}\n' for name, value in providers.items())
     example += '\n# Insert after existing advertising/tracking and private-network rules.\n'
     example += '# Keep the rest of your original rules; this is only a merge fragment.\n'
-    example += 'rules:\n' + ''.join(f'  - RULE-SET,{name},固定家宽出口\n' for name in providers)
+    example += 'rules:\n' + ''.join(f'  - RULE-SET,{name},CC出口\n' for name in providers)
     (examples / 'providers.yaml').write_text(example)
     # Validate all recommended artifacts with a temporary, offline, non-listening config.
     with tempfile.TemporaryDirectory(prefix='nick-rules-check-') as directory:
