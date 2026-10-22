@@ -1,17 +1,17 @@
 # nick-rules
 
-个人偏好的网络分流规则，按客户端工具独立组织。当前实现 Clash / Mihomo，后续可在 `shadowrocket/` 等目录维护对应工具的规则。
+个人偏好的网络分流规则，按客户端工具独立组织。当前提供 Clash / Mihomo 规则集和 Shadowrocket 分流配置模板。
 
-仓库只保存公开域名、网段、ASN 和构建代码，不保存节点、订阅或客户端完整配置。规则决定匹配哪些请求，出口策略由客户端配置决定。
+Clash 部分只保存公开域名、网段、ASN 和构建代码，出口策略由客户端配置决定。Shadowrocket 部分另提供不含节点凭据的完整分流模板，节点和订阅仍由客户端管理。仓库不保存服务器地址、账号密码、订阅链接、令牌或 HTTPS 解密证书。
 
 ## 工具目录
 
 | 工具 | 维护目录 | 发布目录 | 状态 |
 | --- | --- | --- | --- |
 | Clash / Mihomo | [clash/](clash/README.md) | release 分支 `clash/` | 已实现 |
-| Shadowrocket 等 | 后续按工具增加独立目录 | 按工具隔离 | 本版未实现 |
+| Shadowrocket | [shadowrocket/](shadowrocket/README.md) | main 分支 `shadowrocket/NickPro_cn.conf` | 已提供，可通过链接导入和更新 |
 
-## 五类规则
+## Clash 的五类规则
 
 | 类别 | 权威源文件 | 初始条数 | 默认更新文件 |
 | --- | --- | ---: | --- |
@@ -23,17 +23,25 @@
 
 只修改 `main` 分支的源文件。推送后 Actions 编译和校验，成功才更新 `release` 分支。客户端每 86400 秒拉取一次；无需为了修改域名重新编辑完整代理配置。
 
+## Shadowrocket 配置
+
+[直接导入/更新 NickPro_cn.conf](https://raw.githubusercontent.com/xuzedu/nick-rules/main/shadowrocket/NickPro_cn.conf)
+
+配置包含 AI、Twitter、PayPal 及常用服务分组；具体导入、节点选择、规则来源和验证边界见 [Shadowrocket 使用说明](shadowrocket/README.md)。该文件直接由 main 分支提供，不经 Clash 的 MRS 编译流程，也不改动 release/clash。
+
 ## 维护入口
 
+- [Shadowrocket 接入说明](shadowrocket/README.md)
 - [Clash 接入说明](clash/README.md)
 - [配置合并片段](clash/examples/providers.yaml)
 - [日常维护与发布](CONTRIBUTING.md)
 - [构建与发布记录](https://github.com/xuzedu/nick-rules/actions)
 
-本版只迁移上述五类规则。OpenAI 规则集继续由客户端现有配置引用原来源，没有在此仓库镜像或接管。
+Clash 部分维护上述五类规则。Shadowrocket 配置也直接引用 666OS 等上游规则集，没有镜像或接管它们。
 
 ## 来源和语义
 
 初始规则依据 [one-exit 的 Clash Party 模板](https://github.com/wquguru/one-exit/blob/main/clash-party/override.yaml)，按个人配置需求整理：不采用宽泛关键词匹配和特定 IPv6 拒绝规则。后续由本仓库独立维护，不自动抓取覆盖上游模板。
 
-遥测规则是出口路由，不是放行清单。应放在现有广告和跟踪拦截规则之后。Google、支付、验证等服务被其他网站共用，按域名匹配会影响所有访问这些目标的应用。
+Clash 的遥测规则是出口路由，不是放行清单，继续放在现有广告和跟踪拦截规则之后。Shadowrocket 模板沿用用户此次指定的 AI 兼容性顺序，共享验证/遥测依赖位于广告规则之前，详见该目录说明。Google、支付、验证等服务被其他网站共用，按域名匹配会影响所有访问这些目标的应用。
+
