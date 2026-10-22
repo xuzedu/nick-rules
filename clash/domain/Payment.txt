@@ -1,0 +1,8 @@
++.hcaptcha.com
++.stripe.com
++.stripe.network
++.stripecdn.com
++.intercom.io
++.intercomcdn.com
++.challenges.cloudflare.com
++.withpersona.com

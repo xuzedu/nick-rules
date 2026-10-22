@@ -1,0 +1,9 @@
+payload:
+  - "DOMAIN-SUFFIX,hcaptcha.com"
+  - "DOMAIN-SUFFIX,stripe.com"
+  - "DOMAIN-SUFFIX,stripe.network"
+  - "DOMAIN-SUFFIX,stripecdn.com"
+  - "DOMAIN-SUFFIX,intercom.io"
+  - "DOMAIN-SUFFIX,intercomcdn.com"
+  - "DOMAIN-SUFFIX,challenges.cloudflare.com"
+  - "DOMAIN-SUFFIX,withpersona.com"

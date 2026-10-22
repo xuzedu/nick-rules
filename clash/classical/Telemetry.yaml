@@ -1,0 +1,7 @@
+payload:
+  - "DOMAIN-SUFFIX,sentry.io"
+  - "DOMAIN-SUFFIX,datadoghq.com"
+  - "DOMAIN-SUFFIX,growthbook.io"
+  - "DOMAIN-SUFFIX,usefathom.com"
+  - "DOMAIN-SUFFIX,siftscience.com"
+  - "DOMAIN-SUFFIX,segment.io"

@@ -1,0 +1,63 @@
+{
+  "repository": "xuzedu/nick-rules",
+  "compiler": "Mihomo Meta v1.19.33 linux amd64 with go1.26.10 Wed Oct 21 16:41:58 UTC 2026",
+  "categories": {
+    "Claude": {
+      "rules": 9,
+      "domain_rules": 7,
+      "source_sha256": "50641b30f674ad04ff55fac388da077a0e18ff1bd6b8b45265981382e931d794",
+      "recommended": "clash/classical/Claude.yaml",
+      "artifacts": {
+        "clash/classical/Claude.yaml": "c00828eb62bb99fcf7754f00e80ee640a8788c50da2b681e3d56efc03822ae3a",
+        "clash/domain/Claude.txt": "7433a6c1e113954d0ebddeb0ea87ef8c3cc8844c40831ece3ad06d38e1cd93f0",
+        "clash/domain/Claude.mrs": "95866aa871bcac1fa38cdbc5403ea88850e1c81fd010548b36b8ccdcdc636183",
+        "clash/ipcidr/Claude.txt": "7f39818eb85032417da07e0481f6af86efda6b4eaa6525bef661b99c170770e6",
+        "clash/ipcidr/Claude.mrs": "08c0577bd57acc9fc812ffc80fc19fbdbb532475adf0d2938026991dc58b7745"
+      }
+    },
+    "Payment": {
+      "rules": 8,
+      "domain_rules": 8,
+      "source_sha256": "0d8652c813c8684487268afb04f46bf977d4ebfee004260d6a5325064ab6e71f",
+      "recommended": "clash/domain/Payment.mrs",
+      "artifacts": {
+        "clash/classical/Payment.yaml": "e6e0766e9e88a019347b99109c0946ea373c33fca9837bc59a14e9c45965357a",
+        "clash/domain/Payment.txt": "895a3b2d0f907b962c1a212c6631ea85867054543ec0a8e884272869637836d4",
+        "clash/domain/Payment.mrs": "9a1fce7ca4f677de3c4c1c7e1abb9e5da26b045674601dc2355d0654df646dbb"
+      }
+    },
+    "Telemetry": {
+      "rules": 6,
+      "domain_rules": 6,
+      "source_sha256": "00330f34148920ca51806d1ce36030fc60dcbdf2faaa7055b83df4a30f4a2fb5",
+      "recommended": "clash/domain/Telemetry.mrs",
+      "artifacts": {
+        "clash/classical/Telemetry.yaml": "e442e45dfabdb9a3211421b55b9fa4e59f76d7c2d3cc7949499862e5eee020ac",
+        "clash/domain/Telemetry.txt": "7a682c00fd7f0a05623f6421ab5b93d6ac4dde72ad7dba1046eaa88dacc6c6d7",
+        "clash/domain/Telemetry.mrs": "c49cac71e8154d06e196bb7c46a8e929ffac55a7d05c239d90ad78c88ab871cb"
+      }
+    },
+    "Google": {
+      "rules": 6,
+      "domain_rules": 6,
+      "source_sha256": "9b46069e6c67dc249d066f694739fad62750e76278d1cac188c31de973a0fe78",
+      "recommended": "clash/domain/Google.mrs",
+      "artifacts": {
+        "clash/classical/Google.yaml": "493e5465bb3104742948ccadf60b5f6de804c7d2b88f924b267459de8f834e09",
+        "clash/domain/Google.txt": "68c14250e9f1bf62653c64e42847ab3d71bdeef44c6f6579b2a98951e0938606",
+        "clash/domain/Google.mrs": "4993d2ad44cbe7caf49b2e9bd421fd0d9f28c8bff07cf7e5af2da39fe8226f45"
+      }
+    },
+    "ExitCheck": {
+      "rules": 1,
+      "domain_rules": 1,
+      "source_sha256": "6a4a14930fae783ac6cd2b0cce0a69d3ab96720d899e6ae9ec5b3c08a442ef97",
+      "recommended": "clash/domain/ExitCheck.mrs",
+      "artifacts": {
+        "clash/classical/ExitCheck.yaml": "8d99f23ce8fce6c87baf35faa9b313a792d9855dd1977944848c4a719fcaf05c",
+        "clash/domain/ExitCheck.txt": "8c0adee6abb2e08c0d9494a3a43e742de8a6a4be76730f1240f6ee70c1c6f7b3",
+        "clash/domain/ExitCheck.mrs": "aab52095bc7cd59e4abe25cef7352533438ec62ef27595432ce1820e2507b598"
+      }
+    }
+  }
+}

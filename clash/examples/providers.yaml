@@ -1,0 +1,15 @@
+rule-providers:
+  NickClaude: {"type": "http", "behavior": "classical", "format": "yaml", "interval": 86400, "url": "https://github.com/xuzedu/nick-rules/raw/release/clash/classical/Claude.yaml", "path": "./rules/nick-rules/Claude.yaml"}
+  NickPayment: {"type": "http", "behavior": "domain", "format": "mrs", "interval": 86400, "url": "https://github.com/xuzedu/nick-rules/raw/release/clash/domain/Payment.mrs", "path": "./rules/nick-rules/Payment.mrs"}
+  NickTelemetry: {"type": "http", "behavior": "domain", "format": "mrs", "interval": 86400, "url": "https://github.com/xuzedu/nick-rules/raw/release/clash/domain/Telemetry.mrs", "path": "./rules/nick-rules/Telemetry.mrs"}
+  NickGoogle: {"type": "http", "behavior": "domain", "format": "mrs", "interval": 86400, "url": "https://github.com/xuzedu/nick-rules/raw/release/clash/domain/Google.mrs", "path": "./rules/nick-rules/Google.mrs"}
+  NickExitCheck: {"type": "http", "behavior": "domain", "format": "mrs", "interval": 86400, "url": "https://github.com/xuzedu/nick-rules/raw/release/clash/domain/ExitCheck.mrs", "path": "./rules/nick-rules/ExitCheck.mrs"}
+
+# Insert after existing advertising/tracking and private-network rules.
+# Keep the rest of your original rules; this is only a merge fragment.
+rules:
+  - RULE-SET,NickClaude,固定家宽出口
+  - RULE-SET,NickPayment,固定家宽出口
+  - RULE-SET,NickTelemetry,固定家宽出口
+  - RULE-SET,NickGoogle,固定家宽出口
+  - RULE-SET,NickExitCheck,固定家宽出口

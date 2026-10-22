@@ -1,0 +1,6 @@
++.sentry.io
++.datadoghq.com
++.growthbook.io
++.usefathom.com
++.siftscience.com
++.segment.io

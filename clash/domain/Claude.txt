@@ -1,0 +1,7 @@
++.claude.ai
++.claude.com
++.clau.de
++.anthropic.com
++.claudeusercontent.com
++.claudemcpcontent.com
++.modelcontextprotocol.io
