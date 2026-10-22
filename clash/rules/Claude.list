@@ -1,0 +1,11 @@
+# Claude 与 Anthropic
+# 每行一条规则；不写策略组或节点信息。
+DOMAIN-SUFFIX,claude.ai
+DOMAIN-SUFFIX,claude.com
+DOMAIN-SUFFIX,clau.de
+DOMAIN-SUFFIX,anthropic.com
+DOMAIN-SUFFIX,claudeusercontent.com
+DOMAIN-SUFFIX,claudemcpcontent.com
+DOMAIN-SUFFIX,modelcontextprotocol.io
+IP-CIDR,160.79.104.0/21,no-resolve
+IP-ASN,399358,no-resolve

@@ -1,0 +1,8 @@
+# Google 与验证码
+# 每行一条规则；不写策略组或节点信息。
+DOMAIN-SUFFIX,google.com
+DOMAIN-SUFFIX,googleapis.com
+DOMAIN-SUFFIX,gstatic.com
+DOMAIN-SUFFIX,gmail.com
+DOMAIN-SUFFIX,googleusercontent.com
+DOMAIN-SUFFIX,recaptcha.net

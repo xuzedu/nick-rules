@@ -1,0 +1,41 @@
+name: Build and publish Clash rules
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'clash/rules/**'
+      - 'scripts/**'
+      - '.github/workflows/publish.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: publish-clash-rules
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Download pinned Mihomo compiler
+        env:
+          VERSION: v1.19.33
+          SHA256: 132f6f3edf9a65e62f04853aed3358472e0b2b7666daa8419edfa2ddf5bb6323
+        run: |
+          curl --fail --location --retry 3 \
+            "https://github.com/MetaCubeX/mihomo/releases/download/${VERSION}/mihomo-linux-amd64-${VERSION}.gz" \
+            --output "$RUNNER_TEMP/mihomo.gz"
+          echo "$SHA256  $RUNNER_TEMP/mihomo.gz" | sha256sum --check
+          gzip --decompress "$RUNNER_TEMP/mihomo.gz"
+          chmod +x "$RUNNER_TEMP/mihomo"
+      - name: Compile and validate
+        run: python3 scripts/build.py --mihomo "$RUNNER_TEMP/mihomo" --output dist --repository "$GITHUB_REPOSITORY"
+      - name: Publish generated rules
+        uses: peaceiris/actions-gh-pages@329bcc8f12caed2cefe5a5b80781499a6f3b361b # v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: release
+          publish_dir: ./dist/clash
+          destination_dir: clash
+          enable_jekyll: true
+          commit_message: 'Publish rules from'

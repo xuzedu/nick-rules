@@ -1,0 +1,3 @@
+# 出口检查
+# 每行一条规则；不写策略组或节点信息。
+DOMAIN-SUFFIX,webshare.io
