@@ -12,6 +12,7 @@ import urllib.request
 
 
 ROOT = Path(__file__).resolve().parent
+OWN_RULE_BASE = "https://raw.githubusercontent.com/xuzedu/nick-rules/main/shadowrocket/rules/"
 BUILTINS = {"DIRECT", "PROXY", "REJECT"}
 SUPPORTED = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "IP-CIDR", "IP-CIDR6",
              "IP-ASN", "USER-AGENT", "URL-REGEX"}
@@ -60,13 +61,33 @@ def active_lines(text):
             if s.strip() and not s.lstrip().startswith(("#", ";", "//"))]
 
 
-def fetch(url):
+def read_sections(text):
+    sections, section = {}, None
+    for line in active_lines(text):
+        if line.startswith("[") and line.endswith("]"):
+            section = line[1:-1]
+            require(section not in sections, f"重复配置段: {section}")
+            sections[section] = []
+        else:
+            require(section is not None, "存在无归属配置行")
+            sections[section].append(line)
+    return sections
+
+
+def fetch(url, local_rules=None):
     require(url.startswith("https://raw.githubusercontent.com/"), f"非预期公开源: {url}")
     for attempt in range(3):
         try:
-            # 不发送认证头；使用系统正常 HTTPS 证书校验。
-            with urllib.request.urlopen(url, timeout=30) as response:
-                data = response.read()
+            source = "https"
+            if local_rules and url.startswith(OWN_RULE_BASE):
+                name = url[len(OWN_RULE_BASE):]
+                require(re.fullmatch(r"[A-Za-z0-9_-]+\.list", name), f"规则文件名不合法: {name}")
+                data = (local_rules / name).read_bytes()
+                source = "local"
+            else:
+                # 不发送认证头；使用系统正常 HTTPS 证书校验。
+                with urllib.request.urlopen(url, timeout=30) as response:
+                    data = response.read()
             text = data.decode("utf-8-sig")
             lines = active_lines(text)
             require(lines and "<html" not in text.lower(), f"规则集为空或返回 HTML: {url}")
@@ -86,7 +107,7 @@ def fetch(url):
             return url, rules, {"url": url, "rules": len(rules),
                                 "sha256": hashlib.sha256(data).hexdigest(),
                                 "types": dict(Counter(r[0] for r in rules)),
-                                "attempts": attempt + 1}
+                                "attempts": attempt + 1, "source": source}
         except (OSError, ValueError):
             if attempt == 2:
                 raise
@@ -97,18 +118,14 @@ def main():
     parser.add_argument("--config", type=Path, default=ROOT / "NickPro_cn.conf",
                         help="待检查的配置，默认使用脚本旁的 NickPro_cn.conf")
     parser.add_argument("--report", type=Path, help="可选：写入本次检查的 JSON 报告")
+    parser.add_argument("--local-rules", type=Path,
+                        help="发布前从指定目录读取本仓库 Shadowrocket 规则，上游仍从 HTTPS 获取")
+    parser.add_argument("--compare-config", type=Path,
+                        help="可选：与拆分前配置对比完整规则展开顺序及分组定义")
     args = parser.parse_args()
     config = args.config
     data = config.read_bytes()
-    sections, section = {}, None
-    for line in active_lines(data.decode("utf-8-sig")):
-        if line.startswith("[") and line.endswith("]"):
-            section = line[1:-1]
-            require(section not in sections, f"重复配置段: {section}")
-            sections[section] = []
-        else:
-            require(section is not None, "存在无归属配置行")
-            sections[section].append(line)
+    sections = read_sections(data.decode("utf-8-sig"))
     groups = {}
     for line in sections["Proxy Group"]:
         name, value = map(str.strip, line.split("=", 1))
@@ -149,13 +166,39 @@ def main():
     require(sections["Proxy"] == [], "新配置不应包含节点凭据")
     require(sections["MITM"] == ["enable = false"], "新配置不应启用解密或携带证书")
     updates = [s for s in sections["General"] if s.startswith("update-url")]
-    require(updates in ([], ["update-url = https://raw.githubusercontent.com/xuzedu/nick-rules/main/shadowrocket/NickPro_cn.conf"]),
-            "配置更新地址不是本仓库的 Shadowrocket 入口")
+    require(not updates, "拆分版不应包含整份配置的 update-url")
+    require(all(r[0] in {"RULE-SET", "GEOIP", "FINAL"} for r in rules),
+            "域名/IP 规则应放在独立规则集内")
     urls = list(dict.fromkeys(r[1] for r in rules if r[0] == "RULE-SET"))
-    print(f"本地结构通过：{len(groups)} 个分组；开始校验 {len(urls)} 个公开规则源。", flush=True)
+    require(not any("/clash/" in u for u in urls), "Shadowrocket 不应再依赖 Clash 源文件")
+    baseline = None
+    all_urls = urls[:]
+    if args.compare_config:
+        baseline = read_sections(args.compare_config.read_text(encoding="utf-8-sig"))
+        all_urls += [s.split(",")[1] for s in baseline["Rule"] if s.startswith("RULE-SET,")]
+        all_urls = list(dict.fromkeys(all_urls))
+    print(f"本地结构通过：{len(groups)} 个分组；校验 {len(urls)} 个规则源，发布前本地替代={bool(args.local_rules)}。", flush=True)
     with ThreadPoolExecutor(max_workers=6) as pool:
-        results = list(pool.map(fetch, urls))
+        results = list(pool.map(lambda u: fetch(u, args.local_rules), all_urls))
     sources = {url: rows for url, rows, _ in results}
+
+    def expand_all(rows):
+        output = []
+        for r in rows:
+            if r[0] == "RULE-SET":
+                output.extend([v[0], v[1], r[2], *v[2:]] for v in sources[r[1]])
+            else:
+                output.append(r)
+        return output
+
+    comparison = None
+    if baseline:
+        baseline_rules = [[s.strip() for s in line.split(",")] for line in baseline["Rule"]]
+        old_expanded, new_expanded = expand_all(baseline_rules), expand_all(rules)
+        require(old_expanded == new_expanded, "拆分前后完整规则顺序/策略/参数不同")
+        require(baseline["Proxy Group"] == sections["Proxy Group"], "拆分改变了分组定义")
+        comparison = {"expanded_rules": len(new_expanded), "identical_order_and_policies": True,
+                      "proxy_groups_unchanged": True}
     expanded = []
     for rule in rules:
         if rule[0] == "RULE-SET":
@@ -177,13 +220,16 @@ def main():
     failed = [r for r in checks if r["actual"] != r["expected"]]
     report = {"checked_at_utc": datetime.now(timezone.utc).isoformat(),
               "config_sha256": hashlib.sha256(data).hexdigest(), "groups": len(groups),
-              "local_rules": len(rules), "sources": [r[2] for r in results],
+              "local_rules": len(rules), "sources": [r[2] for r in results if r[0] in urls],
+              "comparison": comparison,
               "domain_checks": checks, "failures": failed,
               "scope": "结构、URL、文本规则语法、域名顺序模拟；未运行 Shadowrocket，未模拟 DNS/IP/ASN/GeoIP/UA/URL 解密规则或模块优先级。"}
     if args.report:
         args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     require(not failed, f"域名分流不符: {failed}")
-    print(f"通过：{len(urls)} 个 URL；{sum(len(r[1]) for r in results)} 条远程规则；{len(checks)} 个域名用例。")
+    print(f"通过：{len(urls)} 个规则源；{sum(len(sources[u]) for u in urls)} 条规则；{len(checks)} 个域名用例。")
+    if comparison:
+        print(f"拆分等价：{comparison['expanded_rules']} 条展开规则及其顺序、策略、参数完全一致；分组未变。")
     print(report["scope"])
 
 

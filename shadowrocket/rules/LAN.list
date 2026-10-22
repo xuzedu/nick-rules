@@ -1,0 +1,17 @@
+# Shadowrocket LAN 本地补充规则
+# 每行只写规则类型、匹配值及可选 no-resolve，不写分组、节点或 RULE-SET。
+# 由 NickPro_cn.conf 的 RULE-SET 行指定策略；与 clash/rules 独立维护。
+DOMAIN-SUFFIX,local
+DOMAIN-SUFFIX,lan
+DOMAIN-SUFFIX,localhost
+DOMAIN-SUFFIX,home.arpa
+IP-CIDR,10.0.0.0/8,no-resolve
+IP-CIDR,100.64.0.0/10,no-resolve
+IP-CIDR,127.0.0.0/8,no-resolve
+IP-CIDR,169.254.0.0/16,no-resolve
+IP-CIDR,172.16.0.0/12,no-resolve
+IP-CIDR,192.168.0.0/16,no-resolve
+IP-CIDR6,::1/128,no-resolve
+IP-CIDR6,fc00::/7,no-resolve
+IP-CIDR6,fe80::/10,no-resolve
+

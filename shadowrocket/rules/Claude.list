@@ -1,0 +1,16 @@
+# Shadowrocket Claude 本地补充规则
+# 每行只写规则类型、匹配值及可选 no-resolve，不写分组、节点或 RULE-SET。
+# 由 NickPro_cn.conf 的 RULE-SET 行指定策略；与 clash/rules 独立维护。
+DOMAIN-SUFFIX,claude.dev
+DOMAIN-SUFFIX,claudemcpclient.com
+DOMAIN-SUFFIX,claude.ai
+DOMAIN-SUFFIX,claude.com
+DOMAIN-SUFFIX,clau.de
+DOMAIN-SUFFIX,anthropic.com
+DOMAIN-SUFFIX,claudeusercontent.com
+DOMAIN-SUFFIX,claudemcpcontent.com
+DOMAIN-SUFFIX,modelcontextprotocol.io
+IP-CIDR,160.79.104.0/21,no-resolve
+IP-ASN,399358,no-resolve
+IP-CIDR6,2607:6bc0::/48,no-resolve
+

@@ -1,0 +1,14 @@
+# Shadowrocket PayPal 本地补充规则
+# 每行只写规则类型、匹配值及可选 no-resolve，不写分组、节点或 RULE-SET。
+# 由 NickPro_cn.conf 的 RULE-SET 行指定策略；与 clash/rules 独立维护。
+DOMAIN-SUFFIX,paypal.com
+DOMAIN-SUFFIX,paypal.cn
+DOMAIN-SUFFIX,paypal.me
+DOMAIN-SUFFIX,paypalobjects.com
+DOMAIN-SUFFIX,paypal-community.com
+DOMAIN-SUFFIX,braintreepayments.com
+DOMAIN-SUFFIX,braintree-api.com
+DOMAIN-SUFFIX,braintreegateway.com
+DOMAIN-SUFFIX,venmo.com
+DOMAIN-SUFFIX,xoom.com
+

@@ -9,7 +9,7 @@ Clash 部分只保存公开域名、网段、ASN 和构建代码，出口策略�
 | 工具 | 维护目录 | 发布目录 | 状态 |
 | --- | --- | --- | --- |
 | Clash / Mihomo | [clash/](clash/README.md) | release 分支 `clash/` | 已实现 |
-| Shadowrocket | [shadowrocket/](shadowrocket/README.md) | main 分支 `shadowrocket/NickPro_cn.conf` | 已提供，可通过链接导入和更新 |
+| Shadowrocket | [shadowrocket/](shadowrocket/README.md) | main 分支 `shadowrocket/rules/*.list` | 本地配置保留节点选择，远程规则独立更新 |
 
 ## Clash 的五类规则
 
@@ -25,9 +25,9 @@ Clash 部分只保存公开域名、网段、ASN 和构建代码，出口策略�
 
 ## Shadowrocket 配置
 
-[直接导入/更新 NickPro_cn.conf](https://raw.githubusercontent.com/xuzedu/nick-rules/main/shadowrocket/NickPro_cn.conf)
+[首次导入 NickPro_cn.conf](https://raw.githubusercontent.com/xuzedu/nick-rules/main/shadowrocket/NickPro_cn.conf)
 
-配置包含 AI、Twitter、PayPal 及常用服务分组；具体导入、节点选择、规则来源和验证边界见 [Shadowrocket 使用说明](shadowrocket/README.md)。该文件直接由 main 分支提供，不经 Clash 的 MRS 编译流程，也不改动 release/clash。
+配置包含 AI、Twitter、PayPal 及常用服务分组。个人规则独立保存在 `shadowrocket/rules/*.list`，不再引用 `clash/rules/`；666OS 等上游规则仍直接引用。手机保留本地配置与节点选择，日常只更新规则集，不更新整份模板。旧用户请按 [迁移说明](shadowrocket/README.md#旧配置迁移保留已选节点) 只替换规则段并移除旧 update-url。该目录不经 Clash 的 MRS 编译流程，也不改动 release/clash。
 
 ## 维护入口
 
